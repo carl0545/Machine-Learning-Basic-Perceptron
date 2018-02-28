@@ -19,13 +19,13 @@ void printMatrix(Matrix); //Prints the contents matrix
 int main(){
 
   //////////INPUT OF TRAINING AND TESTING MATRIX///////
-  int u_inputs, u_rows, u_cols, test_rows, test_cols;
+  int train_inputs, train_rows, train_cols, test_rows, test_cols;
   Matrix train, test;
 
   ///Training Matrix
-  setBasics(&u_inputs, &u_rows, &u_cols);
+  setBasics(&train_inputs, &train_rows, &train_cols);
 
-  train = new Matrix(u_rows, u_cols, "train");
+  train = new Matrix(train_rows, train_cols, "train");
 
   setValuesf(&train);
 
