@@ -18,17 +18,26 @@ void printMatrix(Matrix); //Prints the contents matrix
 
 int main(){
 
-  //////////INPUT OF TRAINING MATRIX///////
-  int u_inputs, u_rows, u_cols;
-  Matrix train;
+  //////////INPUT OF TRAINING AND TESTING MATRIX///////
+  int u_inputs, u_rows, u_cols, test_rows, test_cols;
+  Matrix train, test;
 
+  ///Training Matrix
   setBasics(&u_inputs, &u_rows, &u_cols);
 
   train = new Matrix(u_rows, u_cols, "train");
 
   setValuesf(&train);
 
+  ///Testing Matrix
+  setBasics(NULL, &test_rows, &test_cols);
+
+  test = new Matrix(test_rows, test_cols, "test");
+
+  setValuesf(&test);
+
   //////////////////////////////////////////
+
 
 
 }
@@ -37,7 +46,11 @@ int main(){
 *Function reads in total inputs, rows and column for the matrix from stdin
 */
 void setBasics(int *input, int *rows, int *cols){
-  cin >> *input;
+
+  if(input != NULL){ //input not recieved for testing matrix
+    cin >> *input;
+  }
+
   cin >> *rows;
   cin >> *cols;
 }
