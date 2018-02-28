@@ -17,6 +17,8 @@ void setValuesf(Matrix*); //Function sets the elements of the matrix from stdin
 void printMatrix(Matrix); //Prints the contents matrix
 
 int main(){
+
+  //////////INPUT OF TRAINING MATRIX///////
   int u_inputs, u_rows, u_cols;
   Matrix train;
 
@@ -25,6 +27,8 @@ int main(){
   train = new Matrix(u_rows, u_cols, "train");
 
   setValuesf(&train);
+
+  //////////////////////////////////////////
 
 
 }
