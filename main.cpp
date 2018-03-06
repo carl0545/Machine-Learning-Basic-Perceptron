@@ -13,8 +13,9 @@ using namespace std;
 
 void setTargetValues(Matrix*, Matrix); //Function grabs the target values from the training matrix and assigns them to the target matrix
 void setBasics(int*, int*, int*); //Function reads in total inputs, rows and column for the matrix from stdin
-void setValuesf(Matrix*); //Function sets the elements of the matrix from stdin
+void setValuesf(Matrix*, bool); //Function sets the elements of the matrix from stdin
 void printMatrix(Matrix); //Prints the contents matrix
+void perceptronAlg(Matrix, Matrix); //Main perceptron algorithm
 
 int main(){
 
@@ -23,15 +24,18 @@ int main(){
   int target_rows, target_cols;
   Matrix train, test, target;
 
+  const double learning_rate = .2;
+
   ///Training Matrix
   setBasics(&train_inputs, &train_rows, &train_cols);
+  train_cols++; //bias column
   train = new Matrix(train_rows, train_cols, "train");
-  setValuesf(&train);
+  setValuesf(&train, true);
 
   ///Testing Matrix
   setBasics(NULL, &test_rows, &test_cols);
   test = new Matrix(test_rows, test_cols, "test");
-  setValuesf(&test);
+  setValuesf(&test, false);
 
   ///Target Matrix
   target_cols = train_cols - test_cols;
@@ -42,15 +46,12 @@ int main(){
   setTargetValues(&target, train);
 
   ///Resize Training Matrix
-  train.narrow(train_cols - target_cols);
+  train.narrow(train_cols - target_cols + 1); //+1 is for the bias column
   train_cols = train.numCols();
 
 
 
   //////////////////////////////////////////
-
-
-
 
 
 }
@@ -72,6 +73,19 @@ void setTargetValues(Matrix *target, Matrix training){
 
 }
 
+void perceptronAlg(Matrix train, Matrix target){
+  int neurons;
+  Matrix *weights;
+
+  neurons = target.numCols();
+  weights->
+
+
+
+
+
+}
+
 /*
 *Function reads in total inputs, rows and column for the matrix from stdin
 */
@@ -88,13 +102,31 @@ void setBasics(int *input, int *rows, int *cols){
 /*
 *Function sets the elements of the matrix from stdin
 */
-void setValuesf(Matrix *m){
+void setValuesf(Matrix *m, bool bias){
 
-  for(int r = 0; r < m->numRows(); r++){
-    for(int c = 0; c < m->numCols(); c++){
-      int element;
-      cin >> element;
-      m->set(r,c, element);
+  if(bias){
+    for(int r = 0; r < m->numRows(); r++){
+      for(int c = 0; c < m->numCols(); c++){
+        if(c == 0){
+          m->set(r,c,-1);
+          continue;
+        }
+        int element;
+        cin >> element;
+        m->set(r,c, element);
+      }
+    }
+
+  }
+
+  else{
+
+    for(int r = 0; r < m->numRows(); r++){
+      for(int c = 0; c < m->numCols(); c++){
+        int element;
+        cin >> element;
+        m->set(r,c, element);
+      }
     }
   }
 
