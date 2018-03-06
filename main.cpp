@@ -19,10 +19,10 @@ void setTargetValues(Matrix*, Matrix); //Function grabs the target values from t
 void setBasics(int*, int*, int*); //Function reads in total inputs, rows and column for the matrix from stdin
 void setValuesf(Matrix*, bool); //Function sets the elements of the matrix from stdin
 void printMatrix(Matrix); //Prints the contents matrix
-void perceptronAlg(Matrix, Matrix); //Main perceptron algorithm
+void perceptronAlg(Matrix, Matrix, Matrix); //Main perceptron algorithm
 void setWeights(Matrix*);//Sets the random weight values at the beginning
 double threshold(double val); //calculates whether to fire or not fire
-
+void printOutput(Matrix, Matrix);
 
 
 int main(){
@@ -41,6 +41,7 @@ int main(){
   train = new Matrix(train_rows, train_cols, "train");
   setValuesf(&train, true);
 
+
   ///Testing Matrix
   setBasics(NULL, &test_rows, &test_cols);
   test = new Matrix(test_rows, test_cols, "test");
@@ -58,10 +59,14 @@ int main(){
   train.narrow(train_cols - target_cols);
   train_cols = train.numCols();
 
+  Matrix oldTrain = new Matrix(train);
+
+  train.normalizeCols();
+
 
 
   //////////////////////////////////////////
-  perceptronAlg(train, target);
+  perceptronAlg(train, target, oldTrain);
 
 
 }
@@ -89,7 +94,7 @@ void setWeights(Matrix *weights){
 
 }
 
-void perceptronAlg(Matrix train, Matrix target){
+void perceptronAlg(Matrix train, Matrix target, Matrix oldTrain){
   int neurons;
   Matrix *weights, activations, values, fin;
 
@@ -113,11 +118,27 @@ void perceptronAlg(Matrix train, Matrix target){
 
   }
 
-  cout << "final: " << endl;
-  fin.print();
+  printOutput(oldTrain, fin);
 
 
+}
 
+void printOutput(Matrix train, Matrix fin){
+
+ for(int r = 0; r < train.numRows(); r++){
+   for(int c = 0; c < train.numCols(); c++){
+     if(c == 0) continue; //skip bias
+     //cout << train.get(r,c) << " ";
+     printf ("%.2f", train.get(r,c));
+     cout << " ";
+   }
+   for(int c = 0; c < fin.numCols(); c++){
+     //cout << fin.get(r,c) << " ";
+     printf ("%.2f", fin.get(r,c));
+     cout << " ";
+   }
+   cout << endl;
+ }
 
 }
 
@@ -156,10 +177,10 @@ void setValuesf(Matrix *m, bool bias){
     for(int r = 0; r < m->numRows(); r++){
       for(int c = 0; c < m->numCols(); c++){
         if(c == 0){
-          m->set(r,c,-1);
+          m->set(r,c,-1.0);
           continue;
         }
-        int element;
+        double element;
         cin >> element;
         m->set(r,c, element);
       }
@@ -171,7 +192,7 @@ void setValuesf(Matrix *m, bool bias){
 
     for(int r = 0; r < m->numRows(); r++){
       for(int c = 0; c < m->numCols(); c++){
-        int element;
+        double element;
         cin >> element;
         m->set(r,c, element);
       }
