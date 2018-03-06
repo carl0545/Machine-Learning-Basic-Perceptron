@@ -9,6 +9,7 @@
 #include "mat.h"
 
 
+
 using namespace std;
 
 void setTargetValues(Matrix*, Matrix); //Function grabs the target values from the training matrix and assigns them to the target matrix
@@ -16,6 +17,7 @@ void setBasics(int*, int*, int*); //Function reads in total inputs, rows and col
 void setValuesf(Matrix*, bool); //Function sets the elements of the matrix from stdin
 void printMatrix(Matrix); //Prints the contents matrix
 void perceptronAlg(Matrix, Matrix); //Main perceptron algorithm
+void setWeights(Matrix*);//Sets the random weight values at the beginning
 
 int main(){
 
@@ -52,6 +54,7 @@ int main(){
 
 
   //////////////////////////////////////////
+  perceptronAlg(train, target);
 
 
 }
@@ -73,12 +76,24 @@ void setTargetValues(Matrix *target, Matrix training){
 
 }
 
+void setWeights(Matrix *weights){
+
+  for(int c = 0; c < weights->numCols(); c++){
+    weights->randCol(c, -1.0, 1.0);
+  }
+
+}
+
 void perceptronAlg(Matrix train, Matrix target){
   int neurons;
   Matrix *weights;
 
   neurons = target.numCols();
-  weights->
+  weights = new Matrix(train.numCols(), neurons);
+
+  setWeights(weights);
+
+  
 
 
 
