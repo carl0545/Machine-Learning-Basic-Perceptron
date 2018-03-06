@@ -12,6 +12,9 @@
 
 using namespace std;
 
+const double LEARNING_RATE = .25;
+const int TRAINING_ITERATIONS = 100;
+
 void setTargetValues(Matrix*, Matrix); //Function grabs the target values from the training matrix and assigns them to the target matrix
 void setBasics(int*, int*, int*); //Function reads in total inputs, rows and column for the matrix from stdin
 void setValuesf(Matrix*, bool); //Function sets the elements of the matrix from stdin
@@ -19,6 +22,7 @@ void printMatrix(Matrix); //Prints the contents matrix
 void perceptronAlg(Matrix, Matrix); //Main perceptron algorithm
 void setWeights(Matrix*);//Sets the random weight values at the beginning
 double threshold(double val); //calculates whether to fire or not fire
+
 
 
 int main(){
@@ -30,8 +34,6 @@ int main(){
   int train_inputs, train_rows, train_cols, test_rows, test_cols;
   int target_rows, target_cols;
   Matrix train, test, target;
-
-  const double learning_rate = .2;
 
   ///Training Matrix
   setBasics(&train_inputs, &train_rows, &train_cols);
@@ -89,7 +91,7 @@ void setWeights(Matrix *weights){
 
 void perceptronAlg(Matrix train, Matrix target){
   int neurons;
-  Matrix *weights, activations, values;
+  Matrix *weights, activations, values, fin;
 
   neurons = target.numCols();
   weights = new Matrix(train.numCols(), neurons);
@@ -97,20 +99,30 @@ void perceptronAlg(Matrix train, Matrix target){
 
   setWeights(weights);
 
-  activations = train.dot(weights);
 
-  values = activations.map(threshold);
 
-  values.print();
+  for(int i = 0; i < TRAINING_ITERATIONS; i++){
+
+    activations = train.dot(weights);
+
+    activations.map(threshold);
+
+    fin = new Matrix(activations);
+
+    weights->sub((Matrix(train.Tdot(activations.sub(target)))).scalarMult(LEARNING_RATE));
+
+  }
+
+  cout << "final: " << endl;
+  fin.print();
 
 
 
 
 }
 
-double threshold(double val){
 
-  cout << "value: " << val << endl;
+double threshold(double val){
 
   if(val <= 0){
     return 0;
