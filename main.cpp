@@ -40,7 +40,7 @@ int main(){
   setValuesf(&test, false);
 
   ///Target Matrix
-  target_cols = train_cols - test_cols;
+  target_cols = train_cols - test_cols - 1;
   target_rows = train_rows;
 
   target = new Matrix(target_rows, target_cols, "target");
@@ -48,7 +48,7 @@ int main(){
   setTargetValues(&target, train);
 
   ///Resize Training Matrix
-  train.narrow(train_cols - target_cols + 1); //+1 is for the bias column
+  train.narrow(train_cols - target_cols);
   train_cols = train.numCols();
 
 
@@ -86,14 +86,29 @@ void setWeights(Matrix *weights){
 
 void perceptronAlg(Matrix train, Matrix target){
   int neurons;
-  Matrix *weights;
+  Matrix *weights, activations;
 
   neurons = target.numCols();
   weights = new Matrix(train.numCols(), neurons);
+  weights->constant(0);
 
   setWeights(weights);
 
-  
+  activations = train.dot(weights);
+
+  cout << "train: " << endl;
+
+  train.print();
+  cout << "weights: " << endl;
+  weights->print();
+
+  cout << "target: " << endl;
+  target.print();
+  cout << "activations: " << endl;
+
+  activations.print();
+
+
 
 
 
