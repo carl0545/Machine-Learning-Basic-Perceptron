@@ -18,8 +18,13 @@ void setValuesf(Matrix*, bool); //Function sets the elements of the matrix from 
 void printMatrix(Matrix); //Prints the contents matrix
 void perceptronAlg(Matrix, Matrix); //Main perceptron algorithm
 void setWeights(Matrix*);//Sets the random weight values at the beginning
+double threshold(double val); //calculates whether to fire or not fire
+
 
 int main(){
+
+  //////
+  initRand();
 
   //////////INPUT OF TRAINING AND TESTING MATRIX///////
   int train_inputs, train_rows, train_cols, test_rows, test_cols;
@@ -78,15 +83,13 @@ void setTargetValues(Matrix *target, Matrix training){
 
 void setWeights(Matrix *weights){
 
-  for(int c = 0; c < weights->numCols(); c++){
-    weights->randCol(c, -1.0, 1.0);
-  }
+  weights->rand(-.02,.05);
 
 }
 
 void perceptronAlg(Matrix train, Matrix target){
   int neurons;
-  Matrix *weights, activations;
+  Matrix *weights, activations, values;
 
   neurons = target.numCols();
   weights = new Matrix(train.numCols(), neurons);
@@ -96,22 +99,25 @@ void perceptronAlg(Matrix train, Matrix target){
 
   activations = train.dot(weights);
 
-  cout << "train: " << endl;
+  values = activations.map(threshold);
 
-  train.print();
-  cout << "weights: " << endl;
-  weights->print();
-
-  cout << "target: " << endl;
-  target.print();
-  cout << "activations: " << endl;
-
-  activations.print();
+  values.print();
 
 
 
 
+}
 
+double threshold(double val){
+
+  cout << "value: " << val << endl;
+
+  if(val <= 0){
+    return 0;
+  }
+  else{
+    return 1.0;
+  }
 
 
 }
