@@ -44,11 +44,13 @@ int main(){
 
   ///Testing Matrix
   setBasics(NULL, &test_rows, &test_cols);
+  test_cols++;
   test = new Matrix(test_rows, test_cols, "test");
-  setValuesf(&test, false);
+  setValuesf(&test, true);
+
 
   ///Target Matrix
-  target_cols = train_cols - test_cols - 1;
+  target_cols = train_cols - test_cols;
   target_rows = train_rows;
 
   target = new Matrix(target_rows, target_cols, "target");
@@ -59,14 +61,14 @@ int main(){
   train.narrow(train_cols - target_cols);
   train_cols = train.numCols();
 
-  Matrix oldTrain = new Matrix(train);
 
+  //Normalize the training matrix to have input values between 0-1
   train.normalizeCols();
 
 
 
-  //////////////////////////////////////////
-  perceptronAlg(train, target, oldTrain);
+  //////Call the perceptron training algorithm
+  perceptronAlg(train, target, test);
 
 
 }
@@ -88,13 +90,21 @@ void setTargetValues(Matrix *target, Matrix training){
 
 }
 
+/*
+*Assigns random numbers to the initial weight matrix
+*/
 void setWeights(Matrix *weights){
 
   weights->rand(-.02,.05);
 
 }
 
-void perceptronAlg(Matrix train, Matrix target, Matrix oldTrain){
+/*
+*Perceptron algorithm that trains the 'train' matrix with the
+*'target' matrix as it's expected outputs then utlizes the new
+* weight matrix on the test matrix
+*/
+void perceptronAlg(Matrix train, Matrix target, Matrix test){
   int neurons;
   Matrix *weights, activations, values, fin;
 
@@ -105,7 +115,7 @@ void perceptronAlg(Matrix train, Matrix target, Matrix oldTrain){
   setWeights(weights);
 
 
-
+  //Training loop
   for(int i = 0; i < TRAINING_ITERATIONS; i++){
 
     activations = train.dot(weights);
@@ -118,22 +128,34 @@ void perceptronAlg(Matrix train, Matrix target, Matrix oldTrain){
 
   }
 
-  printOutput(oldTrain, fin);
+  Matrix newTest = new Matrix(test);
+
+  test.normalizeCols();
+
+  activations = test.dot(weights);
+
+  activations.map(threshold);
+
+  fin = new Matrix(activations);
+
+
+  printOutput(newTest, fin);
 
 
 }
-
+/*
+*Self made print function to match the neccesary required output template
+*for the assignment
+*/
 void printOutput(Matrix train, Matrix fin){
 
  for(int r = 0; r < train.numRows(); r++){
    for(int c = 0; c < train.numCols(); c++){
-     if(c == 0) continue; //skip bias
-     //cout << train.get(r,c) << " ";
+     if(c == 0) continue;
      printf ("%.2f", train.get(r,c));
      cout << " ";
    }
    for(int c = 0; c < fin.numCols(); c++){
-     //cout << fin.get(r,c) << " ";
      printf ("%.2f", fin.get(r,c));
      cout << " ";
    }
@@ -142,7 +164,10 @@ void printOutput(Matrix train, Matrix fin){
 
 }
 
-
+/*
+*Threshold function utlilized within the perceptronAlg function
+* Returns 1 if above zero, or returns 0 if not
+*/
 double threshold(double val){
 
   if(val <= 0){
@@ -203,7 +228,7 @@ void setValuesf(Matrix *m, bool bias){
 }
 
 /*
-*Prints the contents matrix
+*Prints the contents of the matrix, Used for debugging
 */
 void printMatrix(Matrix m){
   int rows = m.numRows();
