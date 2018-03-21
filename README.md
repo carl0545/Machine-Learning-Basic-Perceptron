@@ -1,7 +1,7 @@
 # Machine-Learning-Basic-Perceptron
 Building a basic perceptron from Machine Learning Assignment 3
 
-#The Task
+# The Task
 The perceptron is a fundamental building block of a neural network. So let's play with it before moving on to multiple layer neural networks.
 
 Build a perceptron network in C/C++ (single layer as we saw in class). It should solve a problem that consists of n inputs and m outputs. Your program will be called nn. You may use the following code but all the rest needs to be written by you (do not copy code!!): mat.tar, mat.zip These are matrix and random number routines discussed in class. A sample test program is in mat.cpp and can be uncommented.
