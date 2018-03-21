@@ -1,6 +1,7 @@
 CC=g++
 OPTS=-g -Wall -std=c++11
 BIN=nn
+MISC=rand.o
 SOURCES=main.cpp mat.cpp randmt.cpp
 OBJECTS=$(SOURCES:.cpp=.o)
 $(BIN) : $(OBJECTS)
@@ -8,4 +9,4 @@ $(BIN) : $(OBJECTS)
 $(OBJECTS): %.o : %.cpp
 	$(CC) -c $(OPTS) $^ -o $@
 clean:
-	rm $(OBJECTS) $(BIN)
+	rm $(OBJECTS) $(BIN) $(MISC)
