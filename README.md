@@ -9,8 +9,8 @@ Build a perceptron network in C/C++ (single layer as we saw in class). It should
 the training
 Your program will read in training data from standard input. You should then scale your input to be between 0 and 1. Your program can then train as much as you believe is needed and then print the W matrix. It will then read in test data. For this assignment use all the training data and then use the test data. Do not train on the test data. We will deal with cross validation later. The input file looks like:
 
-\#inputs
-\#rows #cols
+#inputs
+#rows #cols
 row1
 row2
  ...
